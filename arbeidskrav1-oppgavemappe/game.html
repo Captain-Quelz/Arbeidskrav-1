@@ -106,6 +106,60 @@
         damage: 200,
         alive: true,
       };
+
+      // Henter alle bildene
+      const heroImages = document.querySelectorAll(".img-container img");
+
+      // Legger til en eventListener for hvert
+      heroImages.forEach((image) => {
+        image.addEventListener("click", function () {
+          // Finner hvilken helt som angriper basert på bilde-klassen
+          const heroClass = image.parentElement.classList[1];
+          const attackingHero = heroesArray.find((hero) =>
+            hero.name.toLowerCase().includes(heroClass)
+          );
+
+          // Kaller på funksjonen som utfører angrepet på dragen
+          attackDragon(attackingHero);
+        });
+      });
+
+      // Funksjonen som utfører angrepet på dragen
+      function attackDragon(hero) {
+        // Reduserer dragens helse basert på heltens skade
+        dragonObject.currentHP -= hero.damage;
+
+        // Kaller på funksjonen som oppdaterer dragens helsebar
+        updateDragonHealthBar();
+
+      // Funksjonen som oppdaterer dragens helsebar
+      function updateDragonHealthBar() {
+        const healthBarElement = document.querySelector(
+          ".dragon-health-container .healthbar"
+        );
+        const healthTextElement = document.querySelector(
+          ".dragon-health-container .dragon-health-txt"
+        );
+
+        const healthPercentage =
+          (dragonObject.currentHP / dragonObject.maxHP) * 100;
+        healthBarElement.style.width = healthPercentage + "%";
+        healthTextElement.textContent = `${dragonObject.currentHP} / ${dragonObject.maxHP} HP`;
+      }
+
+        // Viser en alert som sier hvilken helt som angriper dragen, og for hvor mye skade
+        alert(
+          `${hero.name} har gjort ${hero.damage} skade på ${dragonObject.name}!`
+        );
+
+        // Sjekker om dragens helse er 0 eller mindre
+        if (dragonObject.currentHP <= 0) {
+          alert(`Gratulerer, du har vunnet spillet!`);
+        }
+      }
+
+
+      
     </script>
   </body>
 </html>
